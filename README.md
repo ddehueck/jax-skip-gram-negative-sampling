@@ -37,7 +37,7 @@ class ExampleDataset(SkipGramDataset):
 
     def tokenize_files(self):
         # read in from a file or wherever your data is kept
-        raw_data = ["this is document_1", "this is document_2", ..., "this is document_1"] 
+        raw_data = ["this is document_1", "this is document_2", ..., "this is document_n"] 
         return [self.tokenizer.tokenize_doc(f) for f in raw_data]
 
 ```
