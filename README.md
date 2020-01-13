@@ -6,7 +6,7 @@ A jax implementation of word2vec's skip-gram model with negative sampling as des
 
 The code provided should be easily extendable to other datasets. Please see `datasets/dataset.py` for the base class you should inherit in your own (just like `datasets/world_order.py` does). Feel free to create an issue if you are having trouble. 
 
-```
+```python
 from .dataset import SkipGramDataset
 from .preprocess import Tokenizer
 
