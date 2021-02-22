@@ -1,4 +1,3 @@
-data/
 *.pth
 experiments/
 .idea/
