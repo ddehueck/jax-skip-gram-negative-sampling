@@ -4,7 +4,7 @@ from dataloader import NumpyLoader
 from model import SkipGramEmbeddings
 from sgns_loss import SGNSLoss
 from tqdm import tqdm
-from datasets.pypi_lang import PyPILangDataset
+# from datasets.pypi_lang import PyPILangDataset
 from datasets.world_order import WorldOrderDataset
 from functools import partial
 import numpy as np
@@ -15,7 +15,7 @@ class Trainer:
     def __init__(self, args):
         # Load data
         self.args = args
-        self.dataset = PyPILangDataset(args)#, examples_path='data/pypi_examples.pth', dict_path='data/pypi_dict.pth')
+        self.dataset = WorldOrderDataset(args)#, examples_path='data/pypi_examples.pth', dict_path='data/pypi_dict.pth')
         self.vocab_size = len(self.dataset.dictionary)
         print("Finished loading dataset")
 
