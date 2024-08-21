@@ -1,5 +1,5 @@
 from jax import jit, grad
-import jax.experimental.optimizers as optim
+import optax as optim
 from dataloader import NumpyLoader
 from model import SkipGramEmbeddings
 from sgns_loss import SGNSLoss
@@ -25,22 +25,29 @@ class Trainer:
         self.model = SkipGramEmbeddings(self.vocab_size, args.embedding_len)
         self.sgns = SGNSLoss(self.dataset)
         # Set up optimizer - rmsprop seems to work the best
-        self.opt_init, self.opt_update, self.get_params = optim.adam(args.lr)
+        optimizer = optim.adam(args.lr)
+        self.opt_init = optimizer.init
+        self.opt_update = optimizer.update
+        self.apply_updates = optim.apply_updates
 
     @partial(jit, static_argnums=(0,))
-    def update(self, i, opt_state, batch):
-        params = self.get_params(opt_state)
+    def update(self, params, opt_state, batch):
         g = grad(self.sgns.forward)(params, batch)
-        return self.opt_update(i, g, opt_state), params, g
+        updates, opt_state = self.opt_update(g, opt_state)
+        params = self.apply_updates(params, updates)
+        return opt_state, params, g
 
     def train(self):
         # Initialize optimizer state!
-        opt_state = self.opt_init(self.model.word_embeds)
+        params = self.model.word_embeds
+        opt_state = self.opt_init(params)
         for epoch in range(self.args.epochs):
             print(f'Beginning epoch: {epoch + 1}/{self.args.epochs}')
             for i, batch in enumerate(tqdm(self.dataloader)):
-                opt_state, params, g = self.update(i, opt_state, batch)
+                opt_state, params, g = self.update(params, opt_state, batch)
             self.log_step(epoch, params, g)
+
+
 
     def log_step(self, epoch, params, g):
         print(f'EPOCH: {epoch} | GRAD MAGNITUDE: {np.sum(g)}')

@@ -29,12 +29,13 @@ class SkipGramEmbeddings:
         :param dictionary: Gensim dictionary object
         :return: Integer corresponding to word vector in self.word_embeds
         """
+        vectorsW = onp.asarray(vectors)
         index = dictionary.token2id[word]
         query = vectors[index]
 
-        ranks = vectors.dot(query).squeeze()
+        ranks = vectorsW.dot(query).squeeze()
         denom = query.T.dot(query).squeeze()
-        denom = denom * onp.sum(vectors ** 2, 1)
+        denom = denom * onp.sum(vectorsW ** 2, 1)
         denom = onp.sqrt(denom)
         ranks = ranks / denom
         mostSimilar = []
