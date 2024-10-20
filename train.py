@@ -11,7 +11,7 @@ def get_args():
     """
     parser.add_argument('--dataset-dir', type=str, default='data/',
                         help='dataset directory (default: data/)')
-    parser.add_argument('--workers', type=int, default=4, metavar='N',
+    parser.add_argument('--workers', type=int, default=1, metavar='N',
                        help='dataloader threads (default: 4)')
     parser.add_argument('--window-size', type=int, default=5, help='Window size\
                         used when generating training examples (default: 5)')

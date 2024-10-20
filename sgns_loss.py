@@ -42,8 +42,8 @@ class SGNSLoss:
 
     @staticmethod
     def bce_loss_w_logits(x, y):
-        max_val = np.clip(x, 0, None)
-        loss = x - x * y + max_val + np.log(np.exp(-max_val) + np.exp((-x - max_val)))
+        max_val = np.clip(-x, 0, None)
+        loss = (1-y) * x + max_val + np.log(np.exp(-max_val) + np.exp((-x - max_val)))
         return loss.mean()
 
     def get_unigram_samples(self, n, word_embeds):
